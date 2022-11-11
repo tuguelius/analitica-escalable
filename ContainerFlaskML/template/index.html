@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Formulario de predicción de supervivencia del Titanic</title>
+        <style>
+            div {width:300px; margin-top: 10px;}
+            label {display:inline-block; width: 100px;}
+            input {width: 150px;}
+            button {width: 150px;}
+            select {width: 150px;}
+        </style>
+    </head>
+    <body>
+        <form name="formulario" action="/" method="post">
+            <div>
+                <label for="pclass">Clase</label>
+                <select name="pclass">
+                    <option value="1" {{"selected" if data['pclass']=='1' else ""}}>Primera clase</option>
+                    <option value="2" {{"selected" if data['pclass']=='2' else ""}}>Segunda clase</option>
+                    <option value="3" {{"selected" if data['pclass']=='3' else ""}}>Tercera clase</option>
+                </select>
+            </div>
+            <div>
+                <label for="sex">Género</label>
+                <select name="sex">
+                    <option value="male" {{"selected" if data['sex']=='male' else ""}}>Hombre</option>
+                    <option value="female" {{"selected" if data['sex']=='female' else ""}}>Mujer</option>
+                </select>
+            </div>
+            <div>
+                <label for="age">Edad</label>
+                <input type="text" name="age" value="{{data['age']}}"/>
+            </div>
+            <div>
+                <label for="fare">Tarifa</label>
+                <input type="text" name="fare" value="{{data['fare']}}"/>
+            </div>
+            <div>
+                <label></label>
+                <input type="submit" value="Enviar"/>
+            </div>
+
+            <div>
+                <p>Resultado: {{output}}</p>
+            </div>
+        </form>
+
+    </body>
+</html>
