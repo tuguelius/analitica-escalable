@@ -1,6 +1,6 @@
 # Analítica Escalable
-Miguel Ángel Gárate Lorente
-Noviembre 2022
+
+**Miguel Ángel Gárate Lorente (Noviembre 2022)**
 
 Este proyecto contiene los archivos fuentes y artefactos necesarios para dar solución a los cuatro primeros ejercicios de la segunda prueba de evaluación de la asignatura **Analítica Escalable** del Máster en Data Science de la Universidad de Alcalá 2021-2022.
 
@@ -11,7 +11,7 @@ Por su parte, el directorio **Container** contiene los artefactos para resolver 
 En último lugar, el directorio **ContainerFlaskML** contiene los artefactos para resolver el cuarto ejercicio.
 
 ## 1. Algoritmo
-En este directorio encontramos el cuaderno de Jupyter ***PEC2.ipynb** con el que hemos entrenado un modelo para predecir la supervivencia de pasajeros del titanic.
+En este directorio encontramos el cuaderno de Jupyter **PEC2.ipynb** con el que hemos entrenado un modelo para predecir la supervivencia de pasajeros del titanic.
 
 El modelo ha sido entrenado con el archivo **titanic.csv** contenido en el mismo directorio.
 
@@ -35,7 +35,7 @@ Emplearemos este pipeline para transformar los datos como paso previo a su uso c
 Para llevar a cabo la predicción, se ha empleado un modelo de regresión logística embebido en un modelo GridSearchCV que permite establecer el conjunto de hiperparámetros óptimo para los datos de entrenamiento contenidos en el archivo **titanic.csv**
 
 ## 2. Contenedor del Algoritmo
-El directorio **Container** contiene todo lo necesario para generar un contenedor de Docker que lanza el programa **app.py** que emplea los tres objetos pkl generados a partir del cuaderno de Jupyter para realizar predicciones:
+El directorio **Container** contiene todo lo necesario para generar un contenedor de Docker que lanza el programa **app.py** que emplea los dos objetos pkl generados a partir del cuaderno de Jupyter para realizar predicciones:
 
 * Pipeline de tratamiento de datos: **pipeline.pkl**
 * Modelo de predicción entrenado: **model.pkl**
@@ -73,10 +73,10 @@ docker pull tuguelius/app:1
 ```
 
 ### 2.5 Ejecución del contenedor de Docker
-Al ser un programa interactivo, el comando que necesitaremos emplear deberá incluir las opciones -ti. Así, el comando será el siguiente:
+Al ser un programa interactivo, el comando que necesitaremos emplear deberá incluir las opciones **-ti**. Así, el comando será el siguiente:
 
 ```
-docker run -ti tuguelius/app:1 .
+docker run -ti tuguelius/app:1
 ```
 
 ## 3. Contenedor del Algoritmo como API
@@ -84,12 +84,16 @@ Mediante el uso de la librería Flask de Python, construimos la segunda versión
 
 La aplicación levanta un servicio web en el puerto 8181 que sirve un formulario HTML en la ruta raiz para poder realizar predicciones, esto es, http://localhost:8181/
 
-El servicio responde a peticiones POST y GET. Basta con emplear el formulario web para enviar peticiones de tipo POST. Es necesario especificar todos los valores y que éstos sean correctos para obtener una predicción correcta. En otro caso, el servicio retornará un error interno.
+El servicio responde a peticiones POST y GET. 
+
+Basta con emplear el formulario web para enviar peticiones de tipo POST. Es necesario especificar todos los valores y que éstos sean correctos para obtener una predicción correcta. En otro caso, el servicio retornará un error interno. 
+La invocación mediante POST mostrará el resultado embebido en el mismo formulario HTML empleado para hacer la petición. 
 
 Para invocarlo mediante GET, basta con incluir los parámetros en la URL. Por ejemplo:
 
 http://localhost:8181/?pclass=2&sex=female&age=66&fare=100
 
+La invocación mediante GET mostrará el resultado en formato JSON. 
 
 ### 3.1 Generación de la imagen de Docker 
 Nos ubicarmos dentro del directorio **ContainerFlaskML**:
@@ -101,7 +105,6 @@ Empleamos el siguiente comando para generar la imagen:
 ```
 docker build -t tuguelius/app:2 .
 ```
-
 
 ### 3.2 Publicación en Docker Hub
 Para la publicación de la imagen de la **versión 2** de la aplicación, empleamos los siguientes comandos:
@@ -130,6 +133,11 @@ docker run -p 5000:8181 tuguelius/app:2
 Una vez levantado el contenedor, basta con abrir la siguiente URL en nuestro navegador:
 
 http://localhost:5000/
+
+Ejemplo de invocación mediante GET:
+
+http://localhost:5000/?pclass=2&sex=female&age=66&fare=100
+
 
 
 

@@ -1,0 +1,7 @@
+{
+    "pclass":"{{data['pclass']}}",
+    "sex":"{{data['sex']}}",
+    "fare":"{{data['fare']}}",
+    "age":"{{data['age']}}",
+    "survived":"{{output}}"
+}

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, Response
 import joblib
 import pandas as pd
 
@@ -54,8 +54,12 @@ def home():
         pipeline = joblib.load("pipeline.pkl")
         model = joblib.load("model.pkl")
         df = pipeline.transform(df).drop("survived", axis=1)
-        prediction = "Superviviente" if model.predict(df)[0] else "No Superviviente"
-        return render_template("index.html", output=prediction, data=data)
+        prediction = model.predict(df)[0]!=0
+    
+    if request.method == 'POST':
+        return render_template("index.html", output="Superviviente" if prediction else "No Superviviente", data=data)
+    else:
+        return Response(render_template("result.json", output=prediction, data=data), mimetype="application/json")
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8181)
