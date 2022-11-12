@@ -4,6 +4,28 @@ import pandas as pd
 pipeline = joblib.load("pipeline.pkl")
 model = joblib.load("model.pkl")
 
+def df_builder(dictionary):
+    
+    feature_list = ["sex", "pclass", "fare", "age"]
+    target_feature = "survived"
+    feature_to_drop = ['name', 'sibsp', 'parch', 'ticket', 'cabin', 'embarked']
+    
+    columns = []
+    values = []
+    
+    for key in feature_list:
+        columns.append(key)
+        values.append(dictionary[key] if key in dictionary else None)
+
+    for key in feature_to_drop:
+        columns.append(key)
+        values.append(None)
+    
+    columns.append(target_feature)
+    values.append("unknown")
+
+    return pd.DataFrame([values], columns=columns)
+
 def retry_input(function, message=" > El valor introducido es incorrecto."):
     print(message)
     return function()
@@ -20,7 +42,7 @@ def get_sex():
     if (data.upper().strip() not in ["M", "F", ""]):
         return retry_input(get_sex)
     else:
-        return data if data != "" else "M"
+        return "female" if data.upper() == "F" else "male"
 
 def get_fare():
     data = input("Introduzca el precio del pasaje: [1000] ")
@@ -46,17 +68,16 @@ def main():
     print()
     print()
 
-    pclass = get_class()
-    sex = get_sex()
-    fare = get_fare()
-    age = get_age()
-
-    data_array = [pclass, age, fare, "female" if sex == "F" else "male", None]
-    column_names = ["pclass", "age", "fare", "sex", "survived"]
+    dictionary = {
+        "pclass": get_class(),
+        "sex": get_sex(),
+        "fare": get_fare(),
+        "age": get_age()
+    }
 
     print()
     print("Datos recibidos:")
-    df = pd.DataFrame([data_array], columns=column_names)
+    df = df_builder(dictionary)
     print(df)
 
     print()

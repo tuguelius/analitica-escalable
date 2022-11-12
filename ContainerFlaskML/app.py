@@ -2,6 +2,28 @@ from flask import Flask, request, render_template
 import joblib
 import pandas as pd
 
+def df_builder(dictionary):
+    
+    feature_list = ["sex", "pclass", "fare", "age"]
+    target_feature = "survived"
+    feature_to_drop = ['name', 'sibsp', 'parch', 'ticket', 'cabin', 'embarked']
+    
+    columns = []
+    values = []
+    
+    for key in feature_list:
+        columns.append(key)
+        values.append(dictionary[key] if key in dictionary else None)
+
+    for key in feature_to_drop:
+        columns.append(key)
+        values.append(None)
+    
+    columns.append(target_feature)
+    values.append("unknown")
+
+    return pd.DataFrame([values], columns=columns)
+
 def build_data_from_source(source):
     data =  {}
     for param in ["pclass" , "fare", "age", "sex"]:
@@ -19,21 +41,12 @@ def build_data_from_request(request):
         return build_data_from_source(request.args)
     return None
 
-def build_data_frame(data):
-
-    if data is None:
-        return None
-    else:
-        columns = ["pclass", "age", "fare", "sex", "survived"]
-        data_array = [data[x] if x in data else None for x in columns ]
-        df = pd.DataFrame([data_array], columns=columns)
-        return df
 
 app = Flask(__name__, template_folder="template")
 @app.route("/" , methods = ["GET", "POST"])
 def home():
     data = build_data_from_request(request)
-    df = build_data_frame(data)
+    df = None if data is None else df_builder(data)
 
     if df is None:
         return render_template("index.html", output="", data=data)

@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 #Habilitamos el puerto para que sea accesible desde fuera del contenedor
 EXPOSE 8181
 
-#Habilitamos el puerto para que sea accesible desde fuera del contenedor
+#Lanzamos la aplicación web
 CMD ["python", "./app.py"]
 
 # docker build -t tuguelius/app:2 .

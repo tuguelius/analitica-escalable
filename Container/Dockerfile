@@ -8,7 +8,7 @@ WORKDIR /app
 #Instalacion de dependencias
 RUN pip install -r requirements.txt
 
-#Habilitamos el puerto para que sea accesible desde fuera del contenedor
+#Lanzamos la aplicación
 CMD ["python", "./app.py"]
 
 # PARA CREAR EL CONTENEDOR
